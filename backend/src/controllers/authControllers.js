@@ -19,7 +19,7 @@ const signup = async (req, res) => {
         return res.status(400).json({message: 'Age must be between 18 and 25'})
     }
     // Check if fields are present
-    if ( !name || !lastName || !email ) {
+    if ( !name || !lastName || !email || !age ) {
         return res.status(400).json({message: 'All info are required'})
     }
     

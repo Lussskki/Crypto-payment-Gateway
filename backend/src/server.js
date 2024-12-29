@@ -11,15 +11,16 @@ import './db/mongo/connectMongo.js'
 // Express server initialize
 import express from 'express'
 const app = express()
-
+ 
 // Json files
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-// Routes 
-import Auth from './routes/auth.js'
-
-app.use('/auth', Auth)
+// Routes
+import paymentRoutes from './routes/payment.js'
+import auth from './routes/auth.js'
+app.use('/api/payment', paymentRoutes)
+app.use('/api/auth', auth)
    
 
 // Server listens to port

@@ -1,26 +1,23 @@
 import jwt from 'jsonwebtoken'
-
 import dotenv from 'dotenv'
 dotenv.config()
 
-// Middleware for verify generated token
 const authUtil = (req, res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1]
+    const authHeader = req.headers['authorization']
+    const token = authHeader?.split(' ')[1] // Extract token from "Bearer <token>"
 
-    // Token not existing
     if (!token) {
-       return res.status(401).json({message: 'Access denied. Token not provided'})
+        console.log('No token provided')
+        return res.status(401).json({ message: 'Unauthorized: User not authenticated' })
     }
 
-    // Token is accessable
-    try{
-      const decoded = jwt.verify(token, process.env.SECRET)  
-
-      req.user = decoded
-
-      next()
-    }catch(error){
-        res.status(400).json({message: 'Invalid or expired token'})
+    try {
+        const decoded = jwt.verify(token, process.env.SECRET) // Verify token
+        req.user = decoded // Attach user to request
+        next() // Proceed to the next middleware
+    } catch (error) {
+        console.error('Invalid or expired token:', error.message)
+        return res.status(401).json({ message: 'Unauthorized: Invalid or expired token' })
     }
 }
 

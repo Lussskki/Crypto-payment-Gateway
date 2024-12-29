@@ -11,10 +11,24 @@ def convert_to_btc(amount):
     return btc_value
 
 if __name__ == "__main__":
+    # Make sure the script receives valid inputs
+    if len(sys.argv) < 3:
+        print("Error: Insufficient arguments")
+        sys.exit(1)
+
     operation = sys.argv[1]  # 'fees' or 'convert'
-    amount = float(sys.argv[2])  # Ensure the amount is cast to float
+    try:
+        amount = float(sys.argv[2])  # Ensure the amount is cast to float
+    except ValueError:
+        print("Error: Invalid amount")
+        sys.exit(1)
 
     if operation == 'fees':
-        print(f"{calculate_transaction_fee(amount)}")  # Print as a number
+        result = calculate_transaction_fee(amount)
+        print(f"{result:.2f}")  # Print as a float with 2 decimal places
     elif operation == 'convert':
-        print(f"{convert_to_btc(amount)}")  # Print as a number
+        result = convert_to_btc(amount)
+        print(f"{result:.8f}")  # Print as a float with 8 decimal places for BTC
+    else:
+        print("Error: Invalid operation. Use 'fees' or 'convert'.")
+        sys.exit(1)
